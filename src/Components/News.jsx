@@ -5,13 +5,12 @@ import Card from './Card'
 const News = () => {
   const [search, setSearch] = useState('politics')
   const [newsData, setNewsData] = useState(null)
-  const API_KEY = '14b2d20837ea4f2ebafe2813c4be30d0'
 
   const getData = useCallback(async (query) => {
     const q = query !== undefined ? query : search
     if (!q.trim()) return
     try {
-      const res = await axios.get(`https://newsapi.org/v2/everything?q=${q}&apiKey=${API_KEY}`)
+      const res = await axios.get(`/api/news`, { params: { q } })
       let dt = res.data.articles.slice(0, 50)
       setNewsData(dt)
       if (query !== undefined) setSearch(q)
