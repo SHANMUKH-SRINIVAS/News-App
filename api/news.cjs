@@ -10,10 +10,14 @@ module.exports = async (req, res) => {
       return res.json({ error: "Missing query param: q" });
     }
 
-    const apiKey = process.env.NEWS_API_KEY;
+    // Prefer server-only env var, but allow Vite-style naming
+    // to reduce setup mistakes during deployment.
+    const apiKey = process.env.NEWS_API_KEY || process.env.VITE_NEWS_API_KEY;
     if (!apiKey) {
       res.statusCode = 500;
-      return res.json({ error: "Server misconfigured: NEWS_API_KEY not set" });
+      return res.json({
+        error: "Server misconfigured: NEWS_API_KEY (or VITE_NEWS_API_KEY) not set",
+      });
     }
 
     const url = new URL("https://newsapi.org/v2/everything");
